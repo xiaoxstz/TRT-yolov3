@@ -90,7 +90,6 @@ class DarkNetParser(object):
                 layer_dict, layer_name, remainder = self._next_layer(remainder)
                 if layer_dict is not None:
                     self.layer_configs[layer_name] = layer_dict
-                    #print(layer_dict)
         return self.layer_configs
 
     def _next_layer(self, remainder):
@@ -738,7 +737,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', type=str, default='yolov3-416',
                         choices=['yolov3-288', 'yolov3-416', 'yolov3-608',
-                                 'yolov3-tiny-288', 'yolov3-tiny-416', 'yolov3-tiny-1024','yolov3-modi-1024'])
+                                 'yolov3-tiny-288', 'yolov3-tiny-416', 'yolov3-tiny-1024'])
     args = parser.parse_args()
 
     cfg_file_path = '%s.cfg' % args.model
@@ -765,10 +764,6 @@ def main():
     if 'tiny' in args.model:
         output_tensor_dims['016_convolutional'] = [255, d // 32, d // 32]
         output_tensor_dims['023_convolutional'] = [255, d // 16, d // 16]
-    if 'modi' in args.model:
-        output_tensor_dims['044_convolutional'] = [255, d // 32, d // 32]
-        output_tensor_dims['056_convolutional'] = [255, d // 16, d // 16]
-        output_tensor_dims['068_convolutional'] = [255, d //  8, d //  8]
     else:
         output_tensor_dims['082_convolutional'] = [255, d // 32, d // 32]
         output_tensor_dims['094_convolutional'] = [255, d // 16, d // 16]

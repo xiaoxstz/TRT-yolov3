@@ -20,7 +20,7 @@ TEXT_THICKNESS = 1
 BLACK = (0, 0, 0)
 GREY = (45, 45, 45)
 WHITE = (255, 255, 255)
-
+number_of_box = 0
 def gen_colors(num_colors):
     """Generate different colors.
     # Arguments
@@ -120,6 +120,10 @@ class BBoxVisualization():
             obj_dict['objects'] += 1
 
         img = cv2.addWeighted(img, 1, blk, ALPHA, 1)
+        number_of_box = obj_dict.get('objects')
+        cv2.putText(img,str(number_of_box),(0,200),cv2.FONT_HERSHEY_SIMPLEX,6,(0,255,0),2)
+        #image_name = "result"+ str(time.time()) +".jpg"
+        #cv2.imwrite(image_name,img)
 
         visualize_time = (time.time() - start_time)*1000
         self.print_stats(obj_dict)

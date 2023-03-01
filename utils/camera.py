@@ -13,7 +13,7 @@ import subprocess
 
 import numpy as np
 import cv2
-
+import os
 # The following flag ise used to control whether to use a GStreamer
 # pipeline to open USB webcam source.  If set to False, we just open
 # the webcam using cv2.VideoCapture(index) machinery. i.e. relying

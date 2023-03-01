@@ -1,0 +1,33 @@
+reference:
+https://zhuanlan.zhihu.com/p/344028017
+https://github.com/yqlbu/TRT-yolov3
+
+another version need to transfer onnx of annoconda of laptop first:
+https://github.com/zombie0117/yolov3-tiny-onnx-TensorRT
+
+command
+cfg to onnx:
+python3 yolov3_to_onnx.py --model yolov3-tiny-1024
+
+onnx to trt:
+python3 onnx_to_tensorrt.py --model yolov3-tiny-1024
+
+run trt:
+python3 detector.py --image --filename ./data/images/061.jpg --model yolov3-tiny-1024 --runtime
+python3 detector_multiple.py --image --filename ./data/images/061.jpg --model yolov3-tiny-1024 --runtime
+
+video detection:
+python3 detector.py --file --filename ./data/videos/test.mp4 --model yolov3-tiny-1024 --runtime
+
+(delete)python3 detector.py --folder --filename /home/benny/TRT-yolov3/data/images/try/ --model yolov3-tiny-1024 --runtime
+
+camera:
+python3 detector.py --vid 0 --model yolov3-tiny-1024 --runtime
+
+
+when class change, from 80 to 1, we need to change:
+yolov3.py: 
+line 77: category_num = 1
+line 408 - 413: self.output_shapes = [(1, 18, h // 32, w // 32),
+                                  (1, 18, h // 16, w // 16)]
+The 18 need to be changed from 255. Because 3*(4+1+80)=255, 3*(4+1+1)=18

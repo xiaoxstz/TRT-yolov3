@@ -7,7 +7,6 @@ import sys
 import argparse
 import cv2
 import pycuda.autoinit  # This is needed for initializing CUDA driver
-import os
 
 from utils.yolo_classes import get_cls_dict
 from utils.yolov3 import TrtYOLOv3
@@ -32,7 +31,7 @@ def parse_args():
     parser = add_camera_args(parser)
     parser.add_argument('--model', type=str, default='yolov3-416',
                         choices=['yolov3-288', 'yolov3-416', 'yolov3-608',
-                                 'yolov3-tiny-288', 'yolov3-tiny-416', 'yolov3-tiny-1024','yolov3-modi-1024'])
+                                 'yolov3-tiny-288', 'yolov3-tiny-416', 'yolov3-tiny-1024'])
     parser.add_argument('--runtime', action='store_true',
                         help='display detailed runtime')
     args = parser.parse_args()
@@ -64,8 +63,7 @@ def loop_and_detect(cam, runtime, trt_yolov3, conf_th, vis):
                 img, _ = vis.draw_bboxes(img, boxes, confs, clss)
             fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
             img = show_fps(img, fps)
-            cv2.imwrite("/home/benny/TRT-yolov3/result.tif", img)
-            cv2.imshow(WINDOW_NAME, img)    
+            cv2.imshow(WINDOW_NAME, img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 

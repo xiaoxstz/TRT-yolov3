@@ -107,7 +107,7 @@ def main():
                         help='enable verbose output (for debugging)')
     parser.add_argument('--model', type=str, default='yolov3-416',
                         choices=['yolov3-288', 'yolov3-416', 'yolov3-608',
-                                 'yolov3-tiny-288', 'yolov3-tiny-416','yolov3-tiny-1024','yolov3-modi-1024'])
+                                 'yolov3-tiny-288', 'yolov3-tiny-416','yolov3-tiny-1024'])
     args = parser.parse_args()
 
     onnx_file_path = '%s.onnx' % args.model

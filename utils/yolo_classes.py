@@ -4,7 +4,7 @@ NOTE: Number of YOLOv3 COCO output classes differs from SSD COCO models.
 """
 
 COCO_CLASSES_LIST = [
-    'person',
+    'bacteria',
     'bicycle',
     'car',
     'motorbike',

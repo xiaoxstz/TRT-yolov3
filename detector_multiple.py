@@ -64,10 +64,63 @@ def loop_and_detect(cam, runtime, trt_yolov3, conf_th, vis):
                 img, _ = vis.draw_bboxes(img, boxes, confs, clss)
             fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
             img = show_fps(img, fps)
-            cv2.imwrite("/home/benny/TRT-yolov3/result.tif", img)
+            #cv2.imwrite("/home/benny/TRT-yolov3/result.tif", img)
             cv2.imshow(WINDOW_NAME, img)    
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+def single_detect(cam, runtime, trt_yolov3, conf_th, vis):
+    """only read one image from the targeted file adress.
+    # Arguments
+      cam: the camera instance (video source). (no use in this function)
+      trt_ssd: the TRT SSD object detector instance.
+      conf_th: confidence/score threshold for object detection.
+      vis: for visualization.
+    """
+
+    timer = cv2.getTickCount()
+    img = cv2.imread("/home/benny/TRT-yolov3/data/images/try/dog_2.jpg")
+    if img is not None:
+        if runtime:
+            boxes, confs, clss, _preprocess_time, _postprocess_time,_network_time = trt_yolov3.detect(img, conf_th)
+            img, _visualize_time = vis.draw_bboxes(img, boxes, confs, clss)
+            time_stamp = record_time(_preprocess_time, _postprocess_time, _network_time, _visualize_time)
+            show_runtime(time_stamp)
+        else:
+            boxes, confs, clss, _, _, _ = trt_yolov3.detect(img, conf_th)
+            img, _ = vis.draw_bboxes(img, boxes, confs, clss)
+        fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
+        img = show_fps(img, fps)
+        #cv2.imwrite("/home/benny/TRT-yolov3/result.tif", img)
+        cv2.imshow(WINDOW_NAME, img)    
+
+def multiple_detect(cam, runtime, trt_yolov3, conf_th, vis):
+    """Read multiple images from the address of the folder.
+    # Arguments
+      cam: the camera instance (video source).(no use in this function)
+      trt_ssd: the TRT SSD object detector instance.
+      conf_th: confidence/score threshold for object detection.
+      vis: for visualization.
+    """
+
+    timer = cv2.getTickCount()
+    folder_address = "/home/benny/TRT-yolov3/data/images/TestImages/"
+    for image_in_folder in os.listdir(folder_address):
+        img = cv2.imread(folder_address+image_in_folder)
+        if img is not None:
+            if runtime:
+                boxes, confs, clss, _preprocess_time, _postprocess_time,_network_time = trt_yolov3.detect(img, conf_th)
+                img, _visualize_time = vis.draw_bboxes(img, boxes, confs, clss)
+                time_stamp = record_time(_preprocess_time, _postprocess_time, _network_time, _visualize_time)
+                show_runtime(time_stamp)
+            else:
+                boxes, confs, clss, _, _, _ = trt_yolov3.detect(img, conf_th)
+                img, _ = vis.draw_bboxes(img, boxes, confs, clss)
+            fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
+            img = show_fps(img, fps)
+            #print("/home/benny/TRT-yolov3/data/images/TestResult/"+image_in_folder)
+            cv2.imwrite("/home/benny/TRT-yolov3/data/images/TestResult/"+image_in_folder, img)
+            cv2.imshow(WINDOW_NAME, img)   
 
 def main():
     args = parse_args()
@@ -85,7 +138,9 @@ def main():
     open_window(WINDOW_NAME, args.image_width, args.image_height,
                 'TensorRT YOLOv3 Detector')
     vis = BBoxVisualization(cls_dict)
-    loop_and_detect(cam, args.runtime, trt_yolov3, conf_th=0.3, vis=vis)
+    #loop_and_detect(cam, args.runtime, trt_yolov3, conf_th=0.3, vis=vis)
+    #single_detect(cam, args.runtime, trt_yolov3, conf_th=0.3, vis=vis)
+    multiple_detect(cam, args.runtime, trt_yolov3, conf_th=0.3, vis=vis)
 
     print('[INFO]  Program: stopped')
     cam.stop()
